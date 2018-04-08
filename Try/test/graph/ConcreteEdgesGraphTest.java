@@ -104,7 +104,7 @@ public class ConcreteEdgesGraphTest extends GraphInstanceTest {
 
     }
     // Testing strategy for ConcreteEdgesGraph.toString()
-    //   TODO
+    //   TODO判断是否为空的图，若不是则返回它的内存地址
     
     // TODO tests for ConcreteEdgesGraph.toString()
     @Test 
@@ -120,8 +120,29 @@ public class ConcreteEdgesGraphTest extends GraphInstanceTest {
      */
     
     // Testing strategy for Edge
-    //   TODO
+    //   TODO一个个进行简单的测试
     
     // TODO tests for operations of Edge
-    
+    @Test
+    public void testGetSource(){
+        Edge edge = new Edge(3,"A","B");
+        assertEquals("Expected source vertex", "A", edge.getSource()); 
+}
+    @Test
+    public void testGetTarget(){
+        Edge edge = new Edge(3,"A","B");
+        assertEquals("Expected target vertex", "B", edge.getTarget()); 
+}
+    @Test
+    public void testGetWeight(){
+        Edge edge = new Edge(3,"A","B");
+        assertEquals("Expected weight", 3, edge.getWeight()); 
+}
+    @Test
+    public void testSetWeight() {
+    	Edge edge = new Edge(3,"A","B");
+    	Edge edge1 = edge.setWeight(5);
+    	Edge edgetest = new Edge(5,"A","B");
+        assertEquals( edgetest, edge1); 
+    }
 }

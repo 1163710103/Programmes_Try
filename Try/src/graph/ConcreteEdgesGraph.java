@@ -26,20 +26,22 @@ public class ConcreteEdgesGraph implements Graph<String> {
     // Abstraction function:
     //   TODO
     // Representation invariant:
-    //   TODO
+    //   TODO  String和Edge
     // Safety from rep exposure:
-    //   TODO
+    //   TODO使用final去建造不可变的对象和属性
     
-    // TODO constructor
-    
+    // TODO constructor 默认的即可
     // TODO checkRep
     private void checkRep(){
         final int sizeOfEdges = edges.size();
         final int sizeOfVertices = vertices.size();
-        int minNumberOfVertices = 
-                sizeOfEdges == 0 ? 0 : (int)Math.ceil(Math.sqrt(2 * sizeOfEdges) + 0.5);
-        
-        assert sizeOfVertices >= minNumberOfVertices;  
+        final int maxEdges;
+        if(sizeOfVertices <=1 ) {
+        	maxEdges = 0;
+        }
+        else maxEdges = sizeOfVertices*(sizeOfVertices-1);
+        //有向图的最大边数maxedges与顶点n的关系：maxedges <= n(n-1)
+        assert sizeOfEdges <= maxEdges;  
 }
     
     @Override public boolean add(String vertex) {
@@ -48,6 +50,7 @@ public class ConcreteEdgesGraph implements Graph<String> {
         }
         else {
         	vertices.add(vertex);
+            checkRep();
         	return true;
         }
     }
@@ -59,16 +62,19 @@ public class ConcreteEdgesGraph implements Graph<String> {
         		previous = edges.get(i).getWeight();
         		if(weight == 0) {
         			edges.remove(i);
+        			checkRep();
         			return previous;
-        		}
+       		}
         		else {
-        			edges.get(i).setWeight(weight);
+        			edges.set(i, edges.get(i).setWeight(weight));
+        			checkRep();
         			return previous;
         		}
         	}
         }
         Edge newedge = new Edge(weight,source,target);
         edges.add(newedge);
+        checkRep();
         return previous;
      
     }
@@ -79,9 +85,11 @@ public class ConcreteEdgesGraph implements Graph<String> {
     		for(int i = 0;i < edges.size();i++){
     			if(edges.get(i).getSource() == vertex) {
     				edges.remove(i);
+    				checkRep();
     			}
     			else if(edges.get(i).getTarget() == vertex){
     				edges.remove(i);
+    				checkRep();
     			}
     		}
         	return true;
@@ -124,15 +132,16 @@ public class ConcreteEdgesGraph implements Graph<String> {
                 .map(edge -> edge.toString())
                 .collect(Collectors.joining("\n"));
 }
-//  //test
-//    public static void main(String[] agrc) {
-//    	ConcreteEdgesGraph graph = new ConcreteEdgesGraph();
-//    	graph.add("A");
-//    	graph.add("B");
-//    	graph.set("A", "B", 5);
-//    	System.out.println(graph.edges.get(0).toString());
-//    }
-//    //
+  //简单测试
+    public static void main(String[] agrc) {
+    	ConcreteEdgesGraph graph = new ConcreteEdgesGraph();
+    	graph.add("A");
+    	graph.add("B");
+    	graph.set("A", "B", 5);
+    	System.out.println(graph.edges.get(0).toString());
+    	
+    }
+    //
 }
 
 /**
@@ -146,9 +155,9 @@ public class ConcreteEdgesGraph implements Graph<String> {
 class Edge {
     
     // TODO fields
-    private String target;
-    private String source;
-    private int weight;
+    private final String target;
+    private final String source;
+    private final int weight;
     // Abstraction function:
     //   TODO
     // Representation invariant:
@@ -179,25 +188,27 @@ class Edge {
     public int getWeight() {
     	return weight;
     }
-    public boolean setTarget(String target) {
-    	this.target = target;
-    	return true;
+    public Edge setWeight(int newweight) {
+    	return new Edge(newweight,source,target);
     }
-    public boolean setSource(String source) {
-    	this.source = source;
-    	return true;
-    }
-    public boolean setWeight(int weight) {
-    	this.weight = weight;
-    	checkRep();
-    	return true;
-    }
-    	
     // TODO toString()
     @Override public String toString(){
         return getSource().toString()+" -> "+getTarget().toString()+": "+getWeight();
 }
     
+    
+    @Override public boolean equals(Object that){
+        Edge thatEdge = (Edge)that;
+        return (  this.getSource().equals(thatEdge.getSource()) ) && (  this.getTarget().equals(thatEdge.getTarget())  ) && (  this.getWeight() == thatEdge.getWeight()  );
+    }
+    @Override public int hashCode(){
+        final int prime = 60;
+        int result = 0;
+        result = prime * result * getSource().hashCode();
+        result = prime * result * getTarget().hashCode();
+        result = prime * result * getWeight();
+        return result;
+}
     
     
     
