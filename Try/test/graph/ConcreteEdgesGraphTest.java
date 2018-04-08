@@ -6,7 +6,9 @@ package graph;
 import static org.junit.Assert.*;
 
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 
 import org.junit.Test;
 
@@ -24,7 +26,7 @@ public class ConcreteEdgesGraphTest extends GraphInstanceTest {
      * Provide a ConcreteEdgesGraph for tests in GraphInstanceTest.
      */
     @Override public Graph<String> emptyInstance() {
-        return new ConcreteEdgesGraph();
+        return new ConcreteEdgesGraph<>();
     }
     
 
@@ -64,6 +66,20 @@ public class ConcreteEdgesGraphTest extends GraphInstanceTest {
     	assertFalse(graph.remove("D"));
     	assertTrue(graph.remove("A"));
     	assertTrue(graph.remove("C"));
+    }
+    @Test
+    public void verticesTest() {
+    	Graph<String> graph = emptyInstance();
+    	graph.add("A");
+    	graph.add("B");
+    	graph.add("C");
+    	Set<String> set = new HashSet<>();
+    	set.add("A");
+    	set.add("B");
+    	set.add("C");
+    	assertEquals(set, graph.vertices());
+
+    	
     }
     
     @Test 
@@ -125,24 +141,24 @@ public class ConcreteEdgesGraphTest extends GraphInstanceTest {
     // TODO tests for operations of Edge
     @Test
     public void testGetSource(){
-        Edge edge = new Edge(3,"A","B");
+        Edge<String> edge = new Edge<>(3,"A","B");
         assertEquals("Expected source vertex", "A", edge.getSource()); 
 }
     @Test
     public void testGetTarget(){
-        Edge edge = new Edge(3,"A","B");
+        Edge<String> edge = new Edge<>(3,"A","B");
         assertEquals("Expected target vertex", "B", edge.getTarget()); 
 }
     @Test
     public void testGetWeight(){
-        Edge edge = new Edge(3,"A","B");
+        Edge<String> edge = new Edge<>(3,"A","B");
         assertEquals("Expected weight", 3, edge.getWeight()); 
 }
     @Test
     public void testSetWeight() {
-    	Edge edge = new Edge(3,"A","B");
-    	Edge edge1 = edge.setWeight(5);
-    	Edge edgetest = new Edge(5,"A","B");
+    	Edge<String> edge = new Edge<>(3,"A","B");
+    	Edge<String> edge1 = edge.setWeight(5);
+    	Edge<String> edgetest = new Edge<>(5,"A","B");
         assertEquals( edgetest, edge1); 
     }
 }
