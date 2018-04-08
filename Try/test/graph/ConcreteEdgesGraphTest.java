@@ -107,6 +107,13 @@ public class ConcreteEdgesGraphTest extends GraphInstanceTest {
     //   TODO
     
     // TODO tests for ConcreteEdgesGraph.toString()
+    @Test 
+    public void toStringTest(){
+    	Graph<String> graph = emptyInstance();
+    	String str = "Empty Graph";
+    	assertEquals(str,graph.toString());
+    	
+    }
     
     /*
      * Testing Edge...

@@ -9,6 +9,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import com.sun.scenario.effect.impl.prism.PrImage;
 
@@ -32,6 +33,14 @@ public class ConcreteEdgesGraph implements Graph<String> {
     // TODO constructor
     
     // TODO checkRep
+    private void checkRep(){
+        final int sizeOfEdges = edges.size();
+        final int sizeOfVertices = vertices.size();
+        int minNumberOfVertices = 
+                sizeOfEdges == 0 ? 0 : (int)Math.ceil(Math.sqrt(2 * sizeOfEdges) + 0.5);
+        
+        assert sizeOfVertices >= minNumberOfVertices;  
+}
     
     @Override public boolean add(String vertex) {
         if(vertices.contains(vertex)) {
@@ -107,7 +116,23 @@ public class ConcreteEdgesGraph implements Graph<String> {
         }
     
     // TODO toString()
-    
+    @Override public String toString(){
+        if ( edges.isEmpty() ) {
+            return "Empty Graph";
+        }
+        return edges.stream()
+                .map(edge -> edge.toString())
+                .collect(Collectors.joining("\n"));
+}
+//  //test
+//    public static void main(String[] agrc) {
+//    	ConcreteEdgesGraph graph = new ConcreteEdgesGraph();
+//    	graph.add("A");
+//    	graph.add("B");
+//    	graph.set("A", "B", 5);
+//    	System.out.println(graph.edges.get(0).toString());
+//    }
+//    //
 }
 
 /**
@@ -136,9 +161,14 @@ class Edge {
     	this.weight = weight;
     	this.source = source;
     	this.target = target;
+    	checkRep();
     }
     // TODO checkRep
-    
+    private void checkRep(){
+        assert source != null;
+        assert target != null;
+        assert weight > 0;
+}
     // TODO methods
     public String getTarget() {
     	return target;
@@ -159,9 +189,19 @@ class Edge {
     }
     public boolean setWeight(int weight) {
     	this.weight = weight;
+    	checkRep();
     	return true;
     }
     	
     // TODO toString()
+    @Override public String toString(){
+        return getSource().toString()+" -> "+getTarget().toString()+": "+getWeight();
+}
+    
+    
+    
+    
     
 }
+
+
